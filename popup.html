@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body { width: 360px; font-family: system-ui, sans-serif; padding: 15px; margin: 0; background: #f4f4f9; }
+        h2 { margin-top: 0; font-size: 18px; color: #333; margin-bottom: 0; }
+
+        .header-controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+
+        #scanButton {
+            background-color: #4CAF50; color: white; border: none; padding: 10px 15px;
+            text-align: center; font-size: 14px; border-radius: 5px; cursor: pointer;
+            font-weight: bold; width: 100%; margin-bottom: 15px;
+        }
+        #scanButton:hover { background-color: #45a049; }
+
+        /* Score Display */
+        #scoreDisplay {
+            text-align: center; font-size: 24px; font-weight: bold; margin-bottom: 15px;
+            padding: 10px; border-radius: 8px; display: none;
+        }
+
+        .lang-toggle { display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: bold; color: #555;}
+        .switch { position: relative; display: inline-block; width: 34px; height: 18px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 20px; }
+        .slider:before { position: absolute; content: ""; height: 14px; width: 14px; left: 2px; bottom: 2px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background-color: #2196F3; }
+        input:checked + .slider:before { transform: translateX(16px); }
+
+        .error-card {
+            padding: 12px; margin-bottom: 10px; background: #ffffff;
+            border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            cursor: pointer; transition: transform 0.1s ease;
+        }
+        .error-card:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.15); }
+        .error-title { font-weight: bold; margin-bottom: 5px; font-size: 14px; }
+        .error-desc { font-size: 13px; color: #555; }
+
+        .card-critical { border-left: 5px solid #ff4d4f; }
+        .card-serious { border-left: 5px solid #faad14; }
+        .card-moderate { border-left: 5px solid #fadb14; }
+        .card-minor { border-left: 5px solid #1890ff; }
+    </style>
+</head>
+<body>
+<div class="header-controls">
+    <h2>Accessibility Scanner</h2>
+    <div class="lang-toggle">
+        <span>EN</span>
+        <label class="switch">
+            <input type="checkbox" id="languageToggle">
+            <span class="slider"></span>
+        </label>
+        <span>TL</span>
+    </div>
+</div>
+
+<button id="scanButton">Scan Page</button>
+
+<div id="scoreDisplay"></div>
+
+<div id="results-container">
+    <p style="font-size: 13px; color: #666; text-align: center;">Click "Scan Page" to analyze the current layout.</p>
+</div>
+
+<script src="popup.js"></script>
+</body>
+</html>

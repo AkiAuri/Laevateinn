@@ -1,0 +1,22 @@
+{
+  "manifest_version": 3,
+  "name": "Laevateinn Accessibility Scanner",
+  "version": "1.0",
+  "description": "Layman accessibility scanner with English/Tagalog support and direct DOM underlining.",
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "permissions": [
+    "activeTab",
+    "scripting"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "kyuehomete@laevateinn.com",
+      "strict_min_version": "109.0"
+    }
+  }
+}
