@@ -62,6 +62,7 @@ document.getElementById('scanButton').addEventListener('click', async () => {
     });
 });
 
+// Render the UI Cards
 function renderResults(violations) {
     const container = document.getElementById('results-container');
     const scoreDisplay = document.getElementById('scoreDisplay');
@@ -99,23 +100,40 @@ function renderResults(violations) {
         const laymanText = getLaymanText(violation.id);
         const card = document.createElement('div');
         card.className = `error-card card-${violation.impact}`;
+        const totalOccurrences = violation.nodes.length;
 
         card.innerHTML = `
       <div class="error-title">${violation.help}</div>
       <div class="error-desc">${laymanText}</div>
-      <div style="margin-top: 5px; font-size: 11px; color: #888;">Impact: ${violation.impact.toUpperCase()} | Occurrences: ${violation.nodes.length}</div>
+      <div style="margin-top: 5px; font-size: 11px; color: #888;">
+        Impact: ${violation.impact.toUpperCase()} | Occurrences: ${totalOccurrences} 
+        <span class="occurrence-tracker" style="display: none; font-weight: bold; color: #1890ff; margin-left: 5px;"></span>
+      </div>
     `;
 
-        // 4. Add Click-to-Jump functionality
-        card.addEventListener('click', () => {
-            // Pass the CSS selector of the FIRST instance of this error
-            const targetSelectorArray = violation.nodes[0].target;
+        // 4. Add Click-to-Cycle functionality
+        let currentIndex = 0; // State tracker for this specific error card
+        const trackerSpan = card.querySelector('.occurrence-tracker');
 
+        card.addEventListener('click', () => {
+            // Get the CSS selector for the CURRENT index
+            const targetSelectorArray = violation.nodes[currentIndex].target;
+
+            // Update UI to show which specific element we are viewing
+            if (totalOccurrences > 1) {
+                trackerSpan.style.display = 'inline';
+                trackerSpan.innerText = `(Focusing: ${currentIndex + 1} of ${totalOccurrences})`;
+            }
+
+            // Execute the jump script on the webpage
             chrome.scripting.executeScript({
                 target: { tabId: activeTabId },
                 func: jumpToElement,
                 args: [targetSelectorArray]
             });
+
+            // Increment index for the next click, looping back to 0 if we hit the end
+            currentIndex = (currentIndex + 1) % totalOccurrences;
         });
 
         container.appendChild(card);
