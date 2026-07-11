@@ -8,12 +8,15 @@
 
         .header-controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
 
-        #scanButton {
-            background-color: #4CAF50; color: white; border: none; padding: 10px 15px;
+        .btn {
+            color: white; border: none; padding: 10px 15px;
             text-align: center; font-size: 14px; border-radius: 5px; cursor: pointer;
-            font-weight: bold; width: 100%; margin-bottom: 15px;
+            font-weight: bold; width: 100%; margin-bottom: 10px; transition: background 0.2s;
         }
+        #scanButton { background-color: #4CAF50; }
         #scanButton:hover { background-color: #45a049; }
+        #exportPdfButton { background-color: #2b3238; display: none; }
+        #exportPdfButton:hover { background-color: #1a1e22; }
 
         /* Score Display */
         #scoreDisplay {
@@ -33,6 +36,8 @@
             padding: 12px; margin-bottom: 10px; background: #ffffff;
             border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             cursor: pointer; transition: transform 0.1s ease;
+            user-select: none; /* Prevents text highlighting on rapid clicks */
+            -webkit-user-select: none;
         }
         .error-card:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.15); }
         .error-title { font-weight: bold; margin-bottom: 5px; font-size: 14px; }
@@ -42,6 +47,10 @@
         .card-serious { border-left: 5px solid #faad14; }
         .card-moderate { border-left: 5px solid #fadb14; }
         .card-minor { border-left: 5px solid #1890ff; }
+
+        details { cursor: default; }
+        details summary { outline: none; cursor: pointer; }
+        details pre { white-space: pre-wrap; word-wrap: break-word; user-select: text; /* Allow dev text copying */ }
     </style>
 </head>
 <body>
@@ -57,7 +66,8 @@
     </div>
 </div>
 
-<button id="scanButton">Scan Page</button>
+<button id="scanButton" class="btn">Scan Page</button>
+<button id="exportPdfButton" class="btn">Export Report to PDF</button>
 
 <div id="scoreDisplay"></div>
 
