@@ -3,45 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <style>
-        body { width: 360px; font-family: system-ui, sans-serif; padding: 15px; margin: 0; background: #f4f4f9; }
-        h2 { margin-top: 0; font-size: 18px; color: #333; margin-bottom: 0; }
+        :root {
+            --bg-color: #f4f4f9; --text-color: #333; --card-bg: #ffffff;
+            --desc-color: #555; --border-color: #ddd; --code-bg: #eee;
+        }
+        body.dark-mode {
+            --bg-color: #1e1e24; --text-color: #f4f4f9; --card-bg: #2b2b36;
+            --desc-color: #bbb; --border-color: #444; --code-bg: #444;
+        }
+
+        body { width: 360px; font-family: system-ui, sans-serif; padding: 15px; margin: 0; background: var(--bg-color); color: var(--text-color); transition: background 0.3s; }
+        h2 { margin-top: 0; font-size: 18px; margin-bottom: 0; }
 
         .header-controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
 
         .btn {
-            color: white; border: none; padding: 10px 15px;
-            text-align: center; font-size: 14px; border-radius: 5px; cursor: pointer;
-            font-weight: bold; width: 100%; margin-bottom: 10px; transition: background 0.2s;
+            color: white; border: none; padding: 10px 15px; text-align: center; font-size: 14px;
+            border-radius: 5px; cursor: pointer; font-weight: bold; width: 100%; margin-bottom: 10px; transition: background 0.2s;
         }
         #scanButton { background-color: #4CAF50; }
         #scanButton:hover { background-color: #45a049; }
-        #exportPdfButton { background-color: #2b3238; display: none; }
-        #exportPdfButton:hover { background-color: #1a1e22; }
+        #exportPdfButton { background-color: #1890ff; display: none; }
+        #exportPdfButton:hover { background-color: #096dd9; }
+
+        /* Severity Filters */
+        .filter-container { display: none; flex-wrap: wrap; gap: 8px; margin-bottom: 15px; padding: 10px; background: var(--card-bg); border-radius: 6px; border: 1px solid var(--border-color); }
+        .filter-title { width: 100%; font-size: 12px; font-weight: bold; margin-bottom: 2px; }
+        .filter-label { font-size: 11px; display: flex; align-items: center; gap: 4px; cursor: pointer; }
 
         /* Score Display */
-        #scoreDisplay {
-            text-align: center; font-size: 24px; font-weight: bold; margin-bottom: 15px;
-            padding: 10px; border-radius: 8px; display: none;
-        }
+        #scoreDisplay { text-align: center; font-size: 24px; font-weight: bold; margin-bottom: 15px; padding: 10px; border-radius: 8px; display: none; }
 
-        .lang-toggle { display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: bold; color: #555;}
+        /* Dark Mode Toggle */
+        .theme-toggle { display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: bold; }
         .switch { position: relative; display: inline-block; width: 34px; height: 18px; }
         .switch input { opacity: 0; width: 0; height: 0; }
         .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 20px; }
         .slider:before { position: absolute; content: ""; height: 14px; width: 14px; left: 2px; bottom: 2px; background-color: white; transition: .4s; border-radius: 50%; }
-        input:checked + .slider { background-color: #2196F3; }
+        input:checked + .slider { background-color: #4CAF50; }
         input:checked + .slider:before { transform: translateX(16px); }
 
         .error-card {
-            padding: 12px; margin-bottom: 10px; background: #ffffff;
-            border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 12px; margin-bottom: 10px; background: var(--card-bg);
+            border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); border: 1px solid var(--border-color);
             cursor: pointer; transition: transform 0.1s ease;
-            user-select: none; /* Prevents text highlighting on rapid clicks */
-            -webkit-user-select: none;
+            user-select: none; -webkit-user-select: none;
         }
         .error-card:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.15); }
         .error-title { font-weight: bold; margin-bottom: 5px; font-size: 14px; }
-        .error-desc { font-size: 13px; color: #555; }
+        .error-desc { font-size: 13px; color: var(--desc-color); }
 
         .card-critical { border-left: 5px solid #ff4d4f; }
         .card-serious { border-left: 5px solid #faad14; }
@@ -49,32 +59,42 @@
         .card-minor { border-left: 5px solid #1890ff; }
 
         details { cursor: default; }
-        details summary { outline: none; cursor: pointer; }
-        details pre { white-space: pre-wrap; word-wrap: break-word; user-select: text; /* Allow dev text copying */ }
+        details summary { outline: none; cursor: pointer; color: var(--text-color); font-weight: bold; }
+        details pre { white-space: pre-wrap; word-wrap: break-word; user-select: text; }
+        code { background: var(--code-bg); padding: 2px 4px; border-radius: 3px; }
     </style>
 </head>
 <body>
 <div class="header-controls">
-    <h2>Accessibility Scanner</h2>
-    <div class="lang-toggle">
-        <span>EN</span>
+    <h2>Access Scanner</h2>
+    <div class="theme-toggle">
+        <span>☀</span>
         <label class="switch">
-            <input type="checkbox" id="languageToggle">
+            <input type="checkbox" id="themeToggle">
             <span class="slider"></span>
         </label>
-        <span>TL</span>
+        <span>🌙</span>
     </div>
 </div>
 
 <button id="scanButton" class="btn">Scan Page</button>
-<button id="exportPdfButton" class="btn">Export Report to PDF</button>
+<button id="exportPdfButton" class="btn">Download PDF Report</button>
+
+<div class="filter-container" id="filterContainer">
+    <div class="filter-title">Toggle Webpage Highlights:</div>
+    <label class="filter-label"><input type="checkbox" class="sev-filter" value="critical" checked> Critical</label>
+    <label class="filter-label"><input type="checkbox" class="sev-filter" value="serious" checked> Serious</label>
+    <label class="filter-label"><input type="checkbox" class="sev-filter" value="moderate" checked> Moderate</label>
+    <label class="filter-label"><input type="checkbox" class="sev-filter" value="minor" checked> Minor</label>
+</div>
 
 <div id="scoreDisplay"></div>
 
 <div id="results-container">
-    <p style="font-size: 13px; color: #666; text-align: center;">Click "Scan Page" to analyze the current layout.</p>
+    <p style="font-size: 13px; color: var(--desc-color); text-align: center;">Click "Scan Page" to analyze the layout.</p>
 </div>
 
+<script src="html2pdf.bundle.min.js"></script>
 <script src="popup.js"></script>
 </body>
 </html>

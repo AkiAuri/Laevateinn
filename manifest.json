@@ -2,13 +2,20 @@
   "manifest_version": 3,
   "name": "Odin-I",
   "version": "1.0",
-  "description": "Layman accessibility scanner with English/Tagalog support and direct DOM underlining.",
+  "description": "Layman accessibility scanner with Light/Dark mode support and direct DOM highlighting.",
+  "icons": {
+    "16": "icon.png",
+    "48": "icon.png",
+    "128": "icon.png"
+  },
   "action": {
-    "default_popup": "popup.html"
+    "default_popup": "popup.html",
+    "default_icon": "icon.png"
   },
   "permissions": [
     "activeTab",
-    "scripting"
+    "scripting",
+    "storage"
   ],
   "host_permissions": [
     "<all_urls>"
