@@ -96,7 +96,7 @@ chrome.storage.local.get("odinReportData", (result) => {
             htmlContent += `
             <div class="issue-block">
                 <div class="issue-title">${escapeHtml(v.help)}</div>
-                <div class="issue-desc">" ${escapeHtml(v.description)} " <br><br>
+                <div class="issue-desc">" ${escapeHtml(getLaymanText(v))} " <br><br>
                 <a href="${v.helpUrl}" target="_blank">View Developer & WCAG Documentation &rarr;</a></div>
             `;
             v.nodes.forEach((node, index) => {

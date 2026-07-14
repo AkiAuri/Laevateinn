@@ -139,7 +139,7 @@ function renderResults(violations) {
 
         card.innerHTML = `
           <div class="error-title">${escapeHtml(violation.help)}</div>
-          <div class="error-desc">${escapeHtml(violation.description)}</div>
+          <div class="error-desc">${escapeHtml(getLaymanText(violation))}</div>
           <div style="margin-top: 5px; font-size: 11px; margin-bottom: 8px;">
             Impact: <strong style="text-transform: capitalize;">${violation.impact}</strong> | Occurrences: ${totalOccurrences} 
             <span class="occurrence-tracker" style="display: none; font-weight: bold; color: #1890ff; margin-left: 5px;"></span>
